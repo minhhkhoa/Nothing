@@ -1,45 +1,74 @@
-# 🖥️ NestJS + Next.js Demo
+Đương nhiên rồi\! Dưới đây là phiên bản làm lại của phần hướng dẫn, được trình bày rõ ràng và chuyên nghiệp hơn, giúp người dùng dễ dàng theo dõi.
 
-Dự án này minh họa cách kết hợp **NestJS (Backend)** và **Next.js (Frontend)** để xây dựng một ứng dụng full-stack nho nhỏ.
+## 🖥️ NestJS + Next.js Demo
 
----
+Dự án này là một ứng dụng full-stack minh họa cách kết hợp **NestJS** (Backend) và **Next.js** (Frontend).
 
-## 📦 Cài đặt
+-----
 
-### 1. Cài đặt dependencies
-- **Client (Next.js)**
-  ```bash
-  cd client
-  npm install
-Server (NestJS)
+## 📦 Cài đặt và Chạy ứng dụng
 
-bash
-Sao chép mã
+### 1\. Cài đặt Dependencies
+
+Mỗi dự án đều có các thư viện và gói phụ thuộc riêng. Bạn cần cài đặt chúng cho cả hai phần **client** (Next.js) và **server** (NestJS).
+
+  * **Client (Next.js)**
+
+<!-- end list -->
+
+```bash
+cd client
+npm install
+```
+
+  * **Server (NestJS)**
+
+<!-- end list -->
+
+```bash
 cd server
 npm install
-🚀 Chạy ứng dụng
-Chạy client (Next.js)
-bash
-Sao chép mã
+```
+
+### 2\. Chạy ứng dụng
+
+Sau khi cài đặt xong, bạn có thể khởi động cả frontend và backend.
+
+  * **Chạy Frontend (Next.js)**
+
+<!-- end list -->
+
+```bash
 cd client
 npm run dev
-Chạy server (NestJS)
-bash
-Sao chép mã
+```
+
+  * **Chạy Backend (NestJS)**
+
+<!-- end list -->
+
+```bash
 cd server
 npm run dev
-🌐 Truy cập
-Mở trình duyệt và vào:
+```
+
+-----
+
+## 🌐 Truy cập
+
+Khi cả hai server đã hoạt động, bạn có thể truy cập vào đường dẫn dưới đây để xem ứng dụng:
 
 👉 http://localhost:3000/users
 
-để xem giao diện Next.js hiển thị dữ liệu từ NestJS.
+Tại đây, giao diện Next.js sẽ hiển thị dữ liệu được lấy từ server NestJS, chứng minh sự kết nối thành công giữa hai phần.
 
-⚙️ Công nghệ sử dụng
-Next.js – Frontend
+-----
 
-NestJS – Backend
+## ⚙️ Công nghệ sử dụng
 
-TypeScript
+Dự án này được xây dựng dựa trên các công nghệ chủ chốt sau:
 
-Node.js
+  * **Next.js**: Framework React để phát triển Frontend.
+  * **NestJS**: Framework Node.js để xây dựng Backend.
+  * **TypeScript**: Ngôn ngữ lập trình giúp tăng cường độ tin cậy và dễ bảo trì.
+  * **Node.js**: Nền tảng runtime cho cả server và client.
