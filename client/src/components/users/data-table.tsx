@@ -51,6 +51,7 @@ import {
   useDeleteManyUserMutation,
   useDeleteUserMutation,
 } from "@/queries/useUser";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -79,12 +80,14 @@ function AlertDialogDeleteAccount({
   setUserDelete: (value: User | undefined) => void;
 }) {
   const { mutateAsync } = useDeleteUserMutation();
+  const deleteUserTranslation = useTranslations("deleteUser");
+  const notifyTranslation = useTranslations("notify");
   const deleteUser = async () => {
     if (userDelete) {
       try {
         const result = await mutateAsync(userDelete.id);
         setUserDelete(undefined);
-        toast("Thông báo", {
+        toast(notifyTranslation("title"), {
           description: result.message,
         });
       } catch (error) {
@@ -103,18 +106,22 @@ function AlertDialogDeleteAccount({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa nhân viên?</AlertDialogTitle>
+          <AlertDialogTitle>{deleteUserTranslation("title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Tài khoản{" "}
+            {deleteUserTranslation("leftDes")}{" "}
             <span className="bg-foreground text-primary-foreground rounded px-1">
               {userDelete?.name}
             </span>{" "}
-            sẽ bị xóa vĩnh viễn
+            {deleteUserTranslation("rightDes")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={deleteUser}>Continue</AlertDialogAction>
+          <AlertDialogCancel>
+            {deleteUserTranslation("buttonCancel")}
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={deleteUser}>
+            {deleteUserTranslation("buttonContinue")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -138,6 +145,14 @@ export function DataTable<TData, TValue>({
   const [userDelete, setUserDelete] = React.useState<User | undefined>();
 
   const detaleManyUser = useDeleteManyUserMutation();
+
+  const headerTranslation = useTranslations("header");
+  const columnShowTranslation = useTranslations("valueColumnShow");
+  const notifyTranslation = useTranslations("notify");
+  const deleteManyTranslation = useTranslations("deleteMany");
+
+  //- cái này phải được ánh xạ đúng với các gía trị sẽ xuất hiện trên columns table nó phải khớp với accessorKey trong columns
+  type ValueColumnKeys = "id" | "name" | "age" | "email" | "action";
 
   const table = useReactTable({
     data,
@@ -168,7 +183,7 @@ export function DataTable<TData, TValue>({
       if (ids) {
         detaleManyUser.mutateAsync(ids);
       }
-      toast("Thông báo", {
+      toast(notifyTranslation("title"), {
         description: "Xóa người dùng thành công!",
       });
     } catch (error) {
@@ -184,7 +199,7 @@ export function DataTable<TData, TValue>({
     >
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter name..."
+          placeholder={headerTranslation("input")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -201,7 +216,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               className="ml-auto text-red-500 hover:text-red-500"
             >
-              Xóa tất cả
+              {deleteManyTranslation("deleteAll")}
             </Button>
           </div>
         )}
@@ -226,7 +241,7 @@ export function DataTable<TData, TValue>({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Select columns
+              {headerTranslation("selectColumns")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -234,6 +249,11 @@ export function DataTable<TData, TValue>({
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
+                //- column.id là string, TypeScript không thể chắc chắn nó thuộc tập "id" | "name" | "age" | "email" | "action" nên cần làm thế này
+                const key: ValueColumnKeys =
+                  column.id === "actions"
+                    ? "action"
+                    : (column.id as ValueColumnKeys);
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
@@ -243,7 +263,8 @@ export function DataTable<TData, TValue>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {/* vấn đề là sau này nếu có thêm cột mới mà quên ko viết vào  ValueColumnKeys thì sẽ lại báo đỏ. Không thì để KDL tham số trong columnShowTranslation là any là gọn nhất (nhưng vẫn phải nhớ viết vào message >.<) thì đỡ phải dùng cách viết ValueColumnKeys*/}
+                    {columnShowTranslation(key)}
                   </DropdownMenuCheckboxItem>
                 );
               })}

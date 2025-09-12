@@ -15,10 +15,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useContext } from "react";
 import { UserTableContext } from "./data-table";
+import { useTranslations } from "next-intl";
 
 function ActionsCell({ row }: { row: Row<User> }) {
   const user = row.original as User;
   const { setUserIdEdit, setUserDelete } = useContext(UserTableContext);
+  const actionTableTranslation = useTranslations("actionTable");
 
   return (
     <DropdownMenu modal={false}>
@@ -29,85 +31,93 @@ function ActionsCell({ row }: { row: Row<User> }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {actionTableTranslation("action")}
+        </DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(user.name)}
         >
-          Copy user name
+          {actionTableTranslation("copyUserName")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setUserIdEdit(user.id)}>
-          Edit user
+          {actionTableTranslation("editUser")}
         </DropdownMenuItem>
         <DropdownMenuItem
           className="hover:!bg-red-500 text-red-500"
           onClick={() => setUserDelete(user)}
         >
-          Delete user
+          {actionTableTranslation("deleteUser")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-export const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "age",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Age
-        <ArrowUpDown className=" h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Email
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => <ActionsCell row={row} />,
-  },
-];
+//- thay vì export const columns thì tạo 1 component để bọc và dùng được hàm useTranslations()
+export function useUserColumns(): ColumnDef<User>[] {
+    const headerTranslation = useTranslations("valueColumnShow");
+
+
+  return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "id",
+      header: headerTranslation("id"),
+    },
+    {
+      accessorKey: "name",
+      header: headerTranslation("name"),
+    },
+    {
+      accessorKey: "age",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          {headerTranslation("age")}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          {headerTranslation("email")}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "actions",
+      header: headerTranslation("action"),
+      cell: ({ row }) => <ActionsCell row={row} />,
+    },
+  ];
+}

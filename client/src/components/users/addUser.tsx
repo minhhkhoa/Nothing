@@ -20,11 +20,17 @@ import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import { useAddUserMutation } from "@/queries/useUser";
+import { useTranslations } from "next-intl";
 
 export default function AddUser() {
   const [open, setOpen] = useState(false);
 
   const addUser = useAddUserMutation();
+
+  const headerTranslation = useTranslations("header");
+  const addUserTranslation = useTranslations("addUser");
+    const notifyTranslation = useTranslations("notify");
+
 
   const form = useForm<CreateUser>({
     //- dinh nghia form
@@ -46,7 +52,7 @@ export default function AddUser() {
 
     try {
       const result = await addUser.mutateAsync(data);
-      toast("Thông báo", {
+      toast(notifyTranslation("title"), {
         description: result.message,
       });
     } catch (error) {
@@ -62,15 +68,15 @@ export default function AddUser() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Tạo người dùng
+            {headerTranslation("createUser")}
           </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Tạo người dùng</DialogTitle>
+          <DialogTitle>{addUserTranslation("title")}</DialogTitle>
           <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
+            {addUserTranslation("description")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -90,13 +96,13 @@ export default function AddUser() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
+                      <Label htmlFor="name">{addUserTranslation("name")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="name"
                           className="w-full"
                           {...field}
-                          placeholder="Nhập tên"
+                          placeholder={addUserTranslation("placeholderName")}
                         />
                         <FormMessage />
                       </div>
@@ -110,13 +116,15 @@ export default function AddUser() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">
+                        {addUserTranslation("email")}
+                      </Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="email"
                           className="w-full"
                           {...field}
-                          placeholder="example@example"
+                          placeholder={addUserTranslation("placeholderEmail")}
                         />
                         <FormMessage />
                       </div>
@@ -130,7 +138,7 @@ export default function AddUser() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="age">Tuổi</Label>
+                      <Label htmlFor="age">{addUserTranslation("age")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           placeholder="Nhập tuổi"
@@ -150,7 +158,7 @@ export default function AddUser() {
         </Form>
         <DialogFooter>
           <Button type="submit" form="add-employee-form">
-            Thêm
+            {addUserTranslation("buttonCreate")}
           </Button>
         </DialogFooter>
       </DialogContent>

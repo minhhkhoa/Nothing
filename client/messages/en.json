@@ -1,0 +1,76 @@
+{
+  "header": {
+    "input": "Filter by name",
+    "createUser": "Create user",
+    "selectColumns": "Select columns to display"
+  },
+
+  "valueColumnShow": {
+    "id": "ID",
+    "name": "Name",
+    "age": "Age",
+    "email": "Email",
+    "action": "Actions"
+  },
+
+  "footer": {
+    "page": "Page",
+    "pageSize": "Rows per page",
+    "firstPage": "First page",
+    "lastPage": "Last page"
+  },
+
+  "actionTable": {
+    "action": "Actions",
+    "copyUserName": "Copy username",
+    "editUser": "Edit user",
+    "deleteUser": "Delete user"
+  },
+
+  "addUser": {
+    "title": "Create user",
+    "description": "Name, email, and password fields are required",
+    "name": "Name",
+    "age": "Age",
+    "email": "Email",
+    "placeholderName": "Enter name",
+    "placeholderEmail": "Enter email",
+    "buttonCreate": "Add"
+  },
+
+  "editUser": {
+    "title": "Edit user",
+    "description": "Name, email, and password fields are required",
+    "name": "Name",
+    "age": "Age",
+    "email": "Email",
+    "placeholderName": "Enter name",
+    "placeholderEmail": "Enter email",
+    "buttonCreate": "Update"
+  },
+
+  "deleteUser": {
+    "title": "Delete user",
+    "leftDes": "User ",
+    "rightDes": " will be permanently deleted",
+    "buttonContinue": "Confirm",
+    "buttonCancel": "Cancel"
+  },
+
+  "deleteMany": {
+    "deleteAll": "Delete all"
+  },
+
+  "notify": {
+    "title": "Notification",
+    "successCreate": "User created successfully",
+    "successUpdate": "User updated successfully",
+    "successDelete": "User deleted successfully"
+  },
+
+  "SwitchLanguage": {
+    "title": "Switch language",
+    "en": "English",
+    "vi": "Vietnamese"
+  }
+}

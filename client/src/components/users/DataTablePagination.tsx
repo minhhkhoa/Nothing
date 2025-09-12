@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -19,6 +20,7 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   const pageCount = table.getPageCount();
   const currentPage = table.getState().pagination.pageIndex + 1; // đổi sang 1-based
+  const footerTranslation = useTranslations("footer");
 
   const getPageNumbers = (current: number, total: number, delta = 1) => {
     const pages: (number | string)[] = [];
@@ -47,12 +49,12 @@ export function DataTablePagination<TData>({
     <div className="flex items-center justify-between px-2 py-4">
       {/* Left: thông tin */}
       <div className="text-sm text-muted-foreground">
-        Page {currentPage} of {pageCount}
+        {footerTranslation("page")} {currentPage} / {pageCount}
       </div>
 
       {/* Center: chọn page size */}
       <div className="flex items-center space-x-2">
-        <span className="text-sm">Rows per page</span>
+        <span className="text-sm">{footerTranslation("pageSize")}</span>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => table.setPageSize(Number(value))}
@@ -78,7 +80,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
-          First
+          {footerTranslation("firstPage")}
         </Button>
         <Button
           variant="outline"
@@ -86,7 +88,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Prev
+          {"<<"}
         </Button>
 
         {getPageNumbers(currentPage, pageCount).map((page, i) =>
@@ -112,7 +114,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          {">>"}
         </Button>
         <Button
           variant="outline"
@@ -120,7 +122,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.setPageIndex(pageCount - 1)}
           disabled={!table.getCanNextPage()}
         >
-          Last
+          {footerTranslation("lastPage")}
         </Button>
       </div>
     </div>

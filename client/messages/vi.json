@@ -1,0 +1,76 @@
+{
+  "header": {
+    "input": "Lọc theo tên",
+    "createUser": "Tạo người dùng",
+    "selectColumns": "Chọn cột hiển thị"
+  },
+
+  "valueColumnShow": {
+    "id": "ID",
+    "name": "Tên",
+    "age": "Tuổi",
+    "email": "Email",
+    "action": "Hành động"
+  },
+
+  "footer": {
+    "page": "Trang",
+    "pageSize": "Số bản ghi trên bảng",
+    "firstPage": "Trang đầu",
+    "lastPage": "Trang cuối"
+  },
+
+  "actionTable": {
+    "action": "Hành động",
+    "copyUserName": "Sao chép tên người dùng",
+    "editUser": "Sửa người dùng",
+    "deleteUser": "Xóa người dùng"
+  },
+
+  "addUser": {
+    "title": "Tạo người dùng",
+    "description": "Các trường tên, email, mật khẩu là bắt buộc",
+    "name": "Tên",
+    "age": "Tuổi",
+    "email": "Email",
+    "placeholderName": "Nhập tên",
+    "placeholderEmail": "Nhập email",
+    "buttonCreate": "Thêm"
+  },
+
+  "editUser": {
+    "title": "Sửa người dùng",
+    "description": "Các trường tên, email, mật khẩu là bắt buộc",
+    "name": "Tên",
+    "age": "Tuổi",
+    "email": "Email",
+    "placeholderName": "Nhập tên",
+    "placeholderEmail": "Nhập email",
+    "buttonCreate": "Cập nhật"
+  },
+
+  "deleteUser": {
+    "title": "Xóa người dùng",
+    "leftDes": "Người dùng ",
+    "rightDes": " sẽ bị xóa vĩnh viễn",
+    "buttonContinue": "Xác nhận",
+    "buttonCancel": "Hủy"
+  },
+
+  "deleteMany": {
+    "deleteAll": "Xóa tất cả"
+  },
+
+  "notify": {
+    "title": "Thông báo",
+    "successCreate": "Tạo người dùng thành công",
+    "successUpdate": "Cập nhật người dùng thành công",
+    "successDelete": "Xóa người dùng thành công"
+  },
+
+  "SwitchLanguage": {
+    "title": "Chuyển ngôn ngữ",
+    "en": "Tiếng Anh",
+    "vi": "Tiếng Việt"
+  }
+}

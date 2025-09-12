@@ -19,8 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UpdateUser, UpdateUserSchema } from "@/schema/user.schema";
 import { useGetUser, useUpdateUserMutation } from "@/queries/useUser";
-import userApiRequest from "@/apiRequest/user";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function EditUser({
   id,
@@ -36,6 +36,9 @@ export default function EditUser({
   };
   const { data } = useGetUser({ id: id as string, enabled: Boolean(id) });
   const editUserMutation = useUpdateUserMutation();
+  const editUserTranslation = useTranslations("editUser");
+    const notifyTranslation = useTranslations("notify");
+
 
   const form = useForm<UpdateUser>({
     resolver: zodResolver(UpdateUserSchema) as Resolver<UpdateUser>,
@@ -54,7 +57,7 @@ export default function EditUser({
         ...data,
       });
 
-      toast("Thông báo", {
+      toast(notifyTranslation("title"), {
         description: result.message,
       });
 
@@ -87,9 +90,9 @@ export default function EditUser({
     >
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Sửa người dùng</DialogTitle>
+          <DialogTitle>{editUserTranslation("title")}</DialogTitle>
           <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
+            {editUserTranslation("description")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -109,13 +112,13 @@ export default function EditUser({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
+                      <Label htmlFor="name">{editUserTranslation("name")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="name"
                           className="w-full"
                           {...field}
-                          placeholder="Nhập tên"
+                          placeholder={editUserTranslation("placeholderName")}
                         />
                         <FormMessage />
                       </div>
@@ -129,13 +132,13 @@ export default function EditUser({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{editUserTranslation("email")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="email"
                           className="w-full"
                           {...field}
-                          placeholder="example@example"
+                          placeholder={editUserTranslation("placeholderEmail")}
                         />
                         <FormMessage />
                       </div>
@@ -149,7 +152,7 @@ export default function EditUser({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="age">Tuổi</Label>
+                      <Label htmlFor="age">{editUserTranslation("age")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           placeholder="Nhập tuổi"
@@ -169,7 +172,7 @@ export default function EditUser({
         </Form>
         <DialogFooter>
           <Button type="submit" form="add-employee-form">
-            Cập nhật
+            {editUserTranslation("buttonCreate")}
           </Button>
         </DialogFooter>
       </DialogContent>
