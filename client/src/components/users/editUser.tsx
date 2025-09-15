@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UpdateUser, UpdateUserSchema } from "@/schema/user.schema";
+import { UpdateUser, updateUserSchema } from "@/schema/user.schema";
 import { useGetUser, useUpdateUserMutation } from "@/queries/useUser";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -37,11 +37,13 @@ export default function EditUser({
   const { data } = useGetUser({ id: id as string, enabled: Boolean(id) });
   const editUserMutation = useUpdateUserMutation();
   const editUserTranslation = useTranslations("editUser");
-    const notifyTranslation = useTranslations("notify");
-
+  const notifyTranslation = useTranslations("notify");
+  const validationTranslation = useTranslations("validation");
 
   const form = useForm<UpdateUser>({
-    resolver: zodResolver(UpdateUserSchema) as Resolver<UpdateUser>,
+    resolver: zodResolver(
+      updateUserSchema(validationTranslation)
+    ) as Resolver<UpdateUser>,
     defaultValues: {
       name: "",
       email: "",
@@ -112,7 +114,9 @@ export default function EditUser({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">{editUserTranslation("name")}</Label>
+                      <Label htmlFor="name">
+                        {editUserTranslation("name")}
+                      </Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="name"
@@ -132,7 +136,9 @@ export default function EditUser({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">{editUserTranslation("email")}</Label>
+                      <Label htmlFor="email">
+                        {editUserTranslation("email")}
+                      </Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="email"

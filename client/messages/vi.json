@@ -72,5 +72,18 @@
     "title": "Chuyển ngôn ngữ",
     "en": "Tiếng Anh",
     "vi": "Tiếng Việt"
+  },
+
+  "validation": {
+    "name": {
+      "min": "Tên cần ít nhất 2 ký tự",
+      "max": "Tên không quá 50 ký tự"
+    },
+    "age": {
+      "min": "Tuổi phải >= 0"
+    },
+    "email": {
+      "invalid": "Email không hợp lệ"
+    }
   }
 }

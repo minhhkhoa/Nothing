@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 
 export const UserSchema = z
@@ -15,9 +16,19 @@ export const UserSchema = z
 export type User = z.infer<typeof UserSchema>;
 
 // CreateUser = User nhưng bỏ id
-export const CreateUserSchema = UserSchema.omit({ id: true });
-export type CreateUser = z.infer<typeof CreateUserSchema>;
+export const createUserSchema = (t: (key: any) => string) =>
+  z.object({
+    name: z
+      .string()
+      .min(2, { message: t("name.min") })
+      .max(50, { message: t("name.max") }),
+    age: z.coerce.number().min(0, { message: t("age.min") }),
+    email: z.string().email(t("email.invalid")),
+  });
+export type CreateUser = z.infer<ReturnType<typeof createUserSchema>>;
 
 // UpdateUser = tất cả optional (PATCH)
-export const UpdateUserSchema = CreateUserSchema.partial();
-export type UpdateUser = z.infer<typeof UpdateUserSchema>;
+export const updateUserSchema = (t: (key: any) => string) =>
+  createUserSchema(t).partial();
+
+export type UpdateUser = z.infer<ReturnType<typeof updateUserSchema>>;

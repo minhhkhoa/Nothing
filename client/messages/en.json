@@ -72,5 +72,18 @@
     "title": "Switch language",
     "en": "English",
     "vi": "Vietnamese"
+  },
+
+  "validation": {
+    "name": {
+      "min": "Name must be at least 2 characters",
+      "max": "Name can't exceed 50 characters"
+    },
+    "age": {
+      "min": "Age must be >= 0"
+    },
+    "email": {
+      "invalid": "Invalid email"
+    }
   }
 }

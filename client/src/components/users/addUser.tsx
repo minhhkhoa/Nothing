@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CreateUser, CreateUserSchema } from "@/schema/user.schema";
+import { CreateUser, createUserSchema } from "@/schema/user.schema";
 import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
@@ -29,12 +29,13 @@ export default function AddUser() {
 
   const headerTranslation = useTranslations("header");
   const addUserTranslation = useTranslations("addUser");
-    const notifyTranslation = useTranslations("notify");
+  const notifyTranslation = useTranslations("notify");
+  const validationTranslation = useTranslations("validation"); 
 
 
   const form = useForm<CreateUser>({
     //- dinh nghia form
-    resolver: zodResolver(CreateUserSchema) as Resolver<CreateUser>, //- validate dữ liệu theo schema
+    resolver: zodResolver(createUserSchema(validationTranslation)) as Resolver<CreateUser>, //- validate dữ liệu theo schema
     defaultValues: {
       name: "",
       email: "",
