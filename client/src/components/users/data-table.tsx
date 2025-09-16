@@ -52,6 +52,9 @@ import {
   useDeleteUserMutation,
 } from "@/queries/useUser";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
+import { socket } from "@/lib/socket";
+import FireworksEffect from "../Fireworks";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -132,17 +135,20 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+    useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   //- define state
-  const [userIdEdit, setUserIdEdit] = React.useState<string | undefined>();
-  const [userDelete, setUserDelete] = React.useState<User | undefined>();
+  const [userIdEdit, setUserIdEdit] = useState<string | undefined>();
+  const [userDelete, setUserDelete] = useState<User | undefined>();
+
+  //- phao hoa
+  const [fireworks, setFireWorks] = useState(false);
 
   const detaleManyUser = useDeleteManyUserMutation();
 
@@ -193,10 +199,33 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  //- listen socket
+  useEffect(() => {
+    // Kết nối
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+
+    // Lắng nghe sự kiện userCreated
+    socket.on("create-user", (newUser) => {
+      if(newUser) setFireWorks(true);
+      console.log("User created:", newUser);
+    });
+
+    // Cleanup khi component unmount
+    return () => {
+      socket.off("userCreated");
+      socket.off("connect");
+    };
+  }, []);
+
   return (
     <UserTableContext.Provider
       value={{ userIdEdit, setUserIdEdit, userDelete, setUserDelete }}
     >
+      {fireworks && (
+        <FireworksEffect fireworks={fireworks} setFireworks={setFireWorks} />
+      )}
       <div className="flex items-center py-4">
         <Input
           placeholder={headerTranslation("input")}

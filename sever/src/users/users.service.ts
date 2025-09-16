@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { EventsGateway } from '../events/events.gateway';
 
 export const mockUsers = [
   { id: 1, name: 'Nguyen Van An', age: 25, email: 'an.nguyen@example.com' },
@@ -35,12 +36,18 @@ export class UsersService {
   private users = [...mockUsers];
   private nextId = mockUsers.length + 1;
 
+  constructor(private readonly eventsGateway: EventsGateway) {}
+
   create(createUserDto: CreateUserDto) {
     const user: User = {
       id: this.nextId++,
       ...createUserDto,
     };
     this.users.push(user);
+
+    //- emit socket về FE khi tạo user success
+    this.eventsGateway.emitEventToAll('create-user', user);
+
     return {
       statusCode: 200,
       message: 'Tạo người dùng thành công',
