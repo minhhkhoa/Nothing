@@ -65,7 +65,8 @@
     "title": "Notification",
     "successCreate": "User created successfully",
     "successUpdate": "User updated successfully",
-    "successDelete": "User deleted successfully"
+    "successDelete": "User deleted successfully",
+    "copyName": "Copy username successfully"
   },
 
   "SwitchLanguage": {

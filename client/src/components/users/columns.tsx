@@ -16,11 +16,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useContext } from "react";
 import { UserTableContext } from "./data-table";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 function ActionsCell({ row }: { row: Row<User> }) {
   const user = row.original as User;
   const { setUserIdEdit, setUserDelete } = useContext(UserTableContext);
   const actionTableTranslation = useTranslations("actionTable");
+  const notifyTranslation = useTranslations("notify");
 
   return (
     <DropdownMenu modal={false}>
@@ -35,7 +37,13 @@ function ActionsCell({ row }: { row: Row<User> }) {
           {actionTableTranslation("action")}
         </DropdownMenuLabel>
         <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(user.name)}
+          onClick={() => {
+            toast.success(notifyTranslation("title"), {
+              description: notifyTranslation("copyName"),
+              position: "top-center",
+            });
+            navigator.clipboard.writeText(user.name);
+          }}
         >
           {actionTableTranslation("copyUserName")}
         </DropdownMenuItem>
@@ -56,8 +64,7 @@ function ActionsCell({ row }: { row: Row<User> }) {
 
 //- thay vì export const columns thì tạo 1 component để bọc và dùng được hàm useTranslations()
 export function useUserColumns(): ColumnDef<User>[] {
-    const headerTranslation = useTranslations("valueColumnShow");
-
+  const headerTranslation = useTranslations("valueColumnShow");
 
   return [
     {
@@ -96,6 +103,7 @@ export function useUserColumns(): ColumnDef<User>[] {
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="!p-0"
         >
           {headerTranslation("age")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -108,6 +116,7 @@ export function useUserColumns(): ColumnDef<User>[] {
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="!p-0"
         >
           {headerTranslation("email")}
           <ArrowUpDown className="ml-2 h-4 w-4" />

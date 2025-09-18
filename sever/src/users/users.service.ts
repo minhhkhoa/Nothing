@@ -46,7 +46,7 @@ export class UsersService {
     this.users.push(user);
 
     //- emit socket về FE khi tạo user success
-    this.eventsGateway.emitEventToAll('create-user', user);
+    this.eventsGateway.emitEventToAll('create_user', user);
 
     return {
       statusCode: 200,

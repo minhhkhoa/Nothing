@@ -207,14 +207,14 @@ export function DataTable<TData, TValue>({
     });
 
     // Lắng nghe sự kiện userCreated
-    socket.on("create-user", (newUser) => {
+    socket.on("create_user", (newUser) => {
       if(newUser) setFireWorks(true);
       console.log("User created:", newUser);
     });
 
     // Cleanup khi component unmount
     return () => {
-      socket.off("userCreated");
+      socket.off("create_user");
       socket.off("connect");
     };
   }, []);

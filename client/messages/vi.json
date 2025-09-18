@@ -65,7 +65,8 @@
     "title": "Thông báo",
     "successCreate": "Tạo người dùng thành công",
     "successUpdate": "Cập nhật người dùng thành công",
-    "successDelete": "Xóa người dùng thành công"
+    "successDelete": "Xóa người dùng thành công",
+    "copyName": "Sao chép tên người dùng thành công"
   },
 
   "SwitchLanguage": {
