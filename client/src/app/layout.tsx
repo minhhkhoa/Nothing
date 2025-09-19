@@ -7,6 +7,9 @@ import AppProvider from "@/components/app-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import SwitchLanguage from "@/components/switch-language";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { VideoTextDemo } from "@/components/VideoTextDemo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,13 +47,23 @@ export default function RootLayout({ children }: Props) {
               enableSystem
               disableTransitionOnChange
             >
-              <header className="h-12 border-b border-b-gray-200 dark:border-b-gray-800">
+              <header className="sticky top-0 z-50 h-12 border-b border-b-gray-200 dark:border-b-gray-800 bg-background">
                 <div className="container mx-auto flex h-full items-center justify-between">
-                  <ModeToggle />
-                  <SwitchLanguage />
+                  <VideoTextDemo />
+                  <div className="flex items-center gap-2 mr-4">
+                    <SwitchLanguage />
+                    <ModeToggle />
+                  </div>
                 </div>
               </header>
-              {children}
+
+              <SidebarProvider>
+                <AppSidebar />
+                <main className="flex-1 container mx-auto">
+                  <SidebarTrigger />
+                  {children}
+                </main>
+              </SidebarProvider>
               <Toaster />
             </ThemeProvider>
           </AppProvider>
