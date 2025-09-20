@@ -7,6 +7,7 @@ import {
   FolderKanban,
   Users,
   ChevronDown,
+  ChartNoAxesCombined,
 } from "lucide-react";
 
 import {
@@ -32,6 +33,7 @@ import {
 // Menu items.
 const items = [
   { title: "Home", url: "/", icon: Home },
+  { title: "Chart", url: "/charts", icon: ChartNoAxesCombined },
   { title: "User", url: "/users", icon: User2 },
   { title: "Calendar", url: "#", icon: Calendar },
   { title: "Search", url: "#", icon: Search },
