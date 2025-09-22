@@ -7,7 +7,7 @@ import React from "react";
 export default function PageTableUsers() {
   //- use context in file sidebar.tsx
   const { state, open, toggleSidebar } = useSidebar();
-  console.log(state, open, toggleSidebar);
+  // console.log(state, open, toggleSidebar);
   return (
     <div className="px-5">
       <DemoPage />

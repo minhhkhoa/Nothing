@@ -59,6 +59,7 @@ import FireworksEffect from "../Fireworks";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  refetch: () => void;
 }
 
 export const UserTableContext = createContext<{
@@ -134,13 +135,11 @@ function AlertDialogDeleteAccount({
 export function DataTable<TData, TValue>({
   columns,
   data,
+  refetch,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
   //- define state
@@ -208,8 +207,9 @@ export function DataTable<TData, TValue>({
 
     // Lắng nghe sự kiện userCreated
     socket.on("create_user", (newUser) => {
-      if(newUser) setFireWorks(true);
+      if (newUser) setFireWorks(true);
       console.log("User created:", newUser);
+      refetch();
     });
 
     // Cleanup khi component unmount

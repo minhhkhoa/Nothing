@@ -26,7 +26,10 @@ const chartConfig = {
 export function ChartDemo1() {
   return (
     <div>
-      <ChartContainer config={chartConfig} className="h-[400px] w-full mx-auto">
+      <ChartContainer
+        config={chartConfig}
+        className="h-[400px] w-full mx-auto"
+      >
         <BarChart
           accessibilityLayer
           data={chartData1}
