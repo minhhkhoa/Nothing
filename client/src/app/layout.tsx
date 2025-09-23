@@ -60,7 +60,10 @@ export default function RootLayout({ children }: Props) {
               <SidebarProvider>
                 <AppSidebar />
                 <main className="flex-1 container mx-auto">
-                  <SidebarTrigger />
+                  <div className="flex items-center">
+                    <SidebarTrigger />
+                    <p>Do something!</p>
+                  </div>
                   {children}
                 </main>
               </SidebarProvider>

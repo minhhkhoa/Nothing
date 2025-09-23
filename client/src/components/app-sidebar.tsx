@@ -22,6 +22,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 import {
@@ -29,6 +30,8 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
+
+import styles from "./index.module.scss";
 
 // Menu items.
 const items = [
@@ -109,6 +112,10 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <div className={styles.customSidebarTrigger}>
+          <SidebarTrigger />
+        </div>
       </SidebarContent>
     </Sidebar>
   );
