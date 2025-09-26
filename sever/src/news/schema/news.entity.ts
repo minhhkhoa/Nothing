@@ -11,6 +11,10 @@ export const createNewsSchema = z
       en: z.string().min(1, 'field description not allow empty').optional(),
     }),
     author: z.string().min(1, 'Trường tác giả không được spep trống'),
+    salary: z.object({
+      min: z.number().min(300),
+      max: z.number().min(9000),
+    })
   })
   .required();
 
