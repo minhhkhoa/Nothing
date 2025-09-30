@@ -31,19 +31,28 @@ export class TranslationService {
    * @param from Ngôn ngữ gốc
    */
   async translateHTML(html: string, to = 'en', from = 'vi'): Promise<string> {
-    // Load HTML vào Cheerio với xmlMode để không bọc <html><body>
-    const $ = cheerio.load(html, { xmlMode: true });
+    if (!html) return '';
+
+    // Load HTML với xmlMode: false để xử lý fragments an toàn
+    const $ = cheerio.load(html, { xmlMode: false, decodeEntities: false });
+
+    // Các thẻ không cần dịch text bên trong
+    const ignoreTags = ['script', 'style', 'code'];
 
     // Hàm đệ quy duyệt và dịch text nodes
-    const traverseAndTranslate = async (node: any) => {
+    const traverseAndTranslate = async (node: cheerio.Element) => {
+      // Bỏ qua nếu node nằm trong thẻ không cần dịch
+      if (node.type === 'tag' && ignoreTags.includes(node.name)) {
+        return;
+      }
+
+      // Dịch text node nếu có nội dung
       if (node.type === 'text' && node.data?.trim()) {
-        // Giải mã entities để dịch chính xác (e.g., &ocirc; -> ô)
         const decodedText = decode(node.data);
         if (decodedText.trim()) {
           try {
             const translated = await this.translateText(decodedText, to, from);
-            // Gán lại text dịch (Cheerio tự encode entities khi cần)
-            node.data = translated;
+            node.data = translated; // Gán lại text đã dịch
           } catch (error) {
             this.logger.error(
               `Lỗi dịch text trong HTML: ${decodedText}`,
@@ -51,19 +60,50 @@ export class TranslationService {
             );
           }
         }
-      } else if (node.type === 'tag') {
-        // Duyệt các node con
-        $(node)
-          .contents()
-          .each((i, child) => traverseAndTranslate(child));
+      }
+
+      // Chỉ duyệt children nếu node là tag
+      if (node.type === 'tag' && node.children) {
+        for (const child of node.children) {
+          await traverseAndTranslate(child);
+        }
       }
     };
 
-    // Bắt đầu duyệt từ root
-    await traverseAndTranslate($.root()[0]);
+    // Dịch attributes (như alt, title)
+    const translateAttributes = async () => {
+      const attributesToTranslate = ['alt', 'title']; // Có thể thêm: 'placeholder', 'data-tooltip'
+      const elements = $(`[${attributesToTranslate.join('],[')}]`).toArray();
 
-    // Trả về HTML fragment, không bao gồm <html><body>
-    return $.root().html() || '';
+      for (const elem of elements) {
+        for (const attr of attributesToTranslate) {
+          const value = $(elem).attr(attr);
+          if (value?.trim()) {
+            const decodedValue = decode(value);
+            try {
+              const translated = await this.translateText(
+                decodedValue,
+                to,
+                from,
+              );
+              $(elem).attr(attr, translated);
+            } catch (error) {
+              this.logger.error(
+                `Lỗi dịch attribute ${attr}: ${decodedValue}`,
+                error,
+              );
+            }
+          }
+        }
+      }
+    };
+
+    // Thực thi: Dịch text nodes trước, rồi attributes
+    await traverseAndTranslate($('body')[0]);
+    await translateAttributes();
+
+    // Trả về HTML fragment
+    return $('body').html() || '';
   }
 
   /**
@@ -80,21 +120,19 @@ export class TranslationService {
 
     for (const field of fieldsToTranslate) {
       if (data[field]) {
-        const vi = data[field].vi; // Giả sử input là { vi: string }
+        const vi = data[field].vi;
         let en: string;
 
         // Kiểm tra xem có phải HTML không
-        const isHTML = /<\w+.*?>/.test(vi) || /&[a-zA-Z0-9#]+;/.test(vi);
+        const isHTML = /<[^>]+>/.test(vi) || /&[a-zA-Z0-9#]+;/.test(vi);
 
         if (isHTML) {
-          // Dịch HTML giữ cấu trúc
           en = await this.translateHTML(vi, 'en', 'vi');
         } else {
-          // Dịch text thuần
           en = await this.translateText(vi, 'en', 'vi');
         }
 
-        result[field] = { vi, en }; // Thay string thành object song ngữ
+        result[field] = { vi, en };
       }
     }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,8 +27,8 @@ import {
 } from "../ui/card";
 import TinyEditor from "../tinyCustomize";
 
-
 export default function News() {
+  const [showData, setShowData] = useState<z.infer<typeof NewsSchema>>();
   const form = useForm<z.infer<typeof NewsSchema>>({
     resolver: zodResolver(NewsSchema),
     defaultValues: {
@@ -42,75 +42,114 @@ export default function News() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof NewsSchema>) => {
+  const onSubmit = async (data: z.infer<typeof NewsSchema>) => {
     console.log(data);
+    const translationResponse = await fetch(
+      "http://localhost:9000/translation?module=news",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    const translatedData = await translationResponse.json();
+    console.log("Translated data:", translatedData);
+    setShowData(translatedData);
   };
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>News</CardTitle>
-        <CardDescription>News description</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form className="space-y-8">
-            <FormField
-              control={form.control}
-              name="title.vi"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+  console.log("show data: ", showData);
 
-            <FormField
-              control={form.control}
-              name="description.vi"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <TinyEditor
-                      field={field}
-                      placeholder="Nhập mô tả tin tức..."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>News</CardTitle>
+          <CardDescription>News description</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title.vi"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="description.vi"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <TinyEditor
+                        field={field}
+                        placeholder="Nhập mô tả tin tức..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="author"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Author</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Button
+            type="submit"
+            onClick={form.handleSubmit(onSubmit, (error) => {
+              console.log("error: ", error);
+            })}
+          >
+            Submit
+          </Button>
+        </CardFooter>
+      </Card>
+
+      {showData !== undefined && showData.description && (
+        <>
+          <div>
+            <p>Đây là tiếng việt</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: showData?.description?.vi,
+              }}
             />
-            <FormField
-              control={form.control}
-              name="author"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Author</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          </div>
+          <div className="my-10">
+            <p>Đây là tiếng anh</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: showData?.description?.en,
+              }}
             />
-          </form>
-        </Form>
-      </CardContent>
-      <CardFooter>
-        <Button
-          type="submit"
-          onClick={form.handleSubmit(onSubmit, (error) => {
-            console.log("error: ", error);
-          })}
-        >
-          Submit
-        </Button>
-      </CardFooter>
-    </Card>
+          </div>
+        </>
+      )}
+    </>
   );
 }
