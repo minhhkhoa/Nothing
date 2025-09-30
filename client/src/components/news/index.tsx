@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { NewsSchema } from "@/schema/news.schema";
+import { NewsSchema, TranslatedNews } from "@/schema/news.schema";
 import {
   Card,
   CardContent,
@@ -28,7 +28,7 @@ import {
 import TinyEditor from "../tinyCustomize";
 
 export default function News() {
-  const [showData, setShowData] = useState<z.infer<typeof NewsSchema>>();
+  const [showData, setShowData] = useState<TranslatedNews>();
   const form = useForm<z.infer<typeof NewsSchema>>({
     resolver: zodResolver(NewsSchema),
     defaultValues: {
@@ -144,7 +144,7 @@ export default function News() {
             <p>Đây là tiếng anh</p>
             <div
               dangerouslySetInnerHTML={{
-                __html: showData?.description?.en,
+                __html: showData.description.en,
               }}
             />
           </div>
