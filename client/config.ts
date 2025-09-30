@@ -3,10 +3,12 @@ import { z } from "zod";
 
 export const configSchema = z.object({
   NEXT_PUBLIC_API_URL: z.string(),
+  NEXT_PUBLIC_APIKEY_TINY: z.string(),
 });
 
 const configProject = configSchema.safeParse({
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  NEXT_PUBLIC_APIKEY_TINY: process.env.NEXT_PUBLIC_APIKEY_TINY,
 });
 
 if (!configProject.success) {
@@ -18,6 +20,6 @@ export const envConfig = configProject.data;
 //- i18n
 export type Locale = (typeof locales)[number];
 
-export const locales = ["vi","en"] as const;
+export const locales = ["vi", "en"] as const;
 export const defaultLocale: Locale = "vi";
 //- end i18n

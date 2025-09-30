@@ -1,0 +1,22 @@
+:root {
+  --tinymce-toolbar-bg: var(--card);
+  --tinymce-toolbar-text: var(--foreground);
+  --tinymce-toolbar-btn-bg: var(--muted);
+  --tinymce-toolbar-btn-hover-bg: var(--accent);
+  --tinymce-toolbar-btn-text: var(--foreground);
+  --tinymce-border-color: var(--border);
+}
+
+.tox .tox-toolbar {
+  background: var(--tinymce-toolbar-bg) !important;
+  border-bottom: 1px solid var(--tinymce-border-color);
+}
+
+.tox .tox-tbtn {
+  background: var(--tinymce-toolbar-btn-bg);
+  color: var(--tinymce-toolbar-btn-text);
+}
+
+.tox .tox-tbtn:hover {
+  background: var(--tinymce-toolbar-btn-hover-bg);
+}
